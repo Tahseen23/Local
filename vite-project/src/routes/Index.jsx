@@ -1,5 +1,6 @@
 import Login from "../Pages/Login";
-import Signup from "../Pages/Signup";
+import ClientSignUp from "../Pages/ClientSignUp";
+import WokerSignUp from '../Pages/WokerSignUp'
 import Home from "../Pages/Home";
 import App from "../App";
 import Options from "../Pages/Options";
@@ -14,8 +15,12 @@ const router=createBrowserRouter([
         element:<Home />
       },
       {
-        path:'/signup',
-        element:<Signup />
+        path:'/signup=client',
+        element:<ClientSignUp />
+      },
+      {
+        path:'/signup=worker',
+        element:<WokerSignUp />
       },
       {
         path:'/login',

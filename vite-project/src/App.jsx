@@ -1,9 +1,6 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import Header from './Components/Header'
-import Home from './Pages/Home'
 import { Outlet, useLocation } from 'react-router-dom'
 
 function App() {
@@ -11,7 +8,7 @@ function App() {
 
   return (
     <main className='pb-14 lg:pb-0' >
-      {(location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname!=='/options') && <Header />}
+      {(location.pathname !== '/login' && location.pathname !== '/signup=client' && location.pathname!=='/options' && location.pathname!=='/signup=worker') && <Header />}
       <div className='min-h-[90vh]'>
         <Outlet />
         </div>

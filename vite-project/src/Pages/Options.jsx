@@ -17,6 +17,15 @@ const Options = () => {
     setOption('Join as Client')
   }
 
+  const handleClick=()=>{
+    if (selectedOption==='client'){
+      navigate('/signup=client')
+    }
+    else if(selectedOption==='worker'){
+      navigate('/signup=worker')
+    }
+  }
+
   return (
     <div>
       <img src={logo}  width={100} alt="" className="p-1 cursor-pointer" onClick={()=>navigate('/')} />
@@ -38,7 +47,7 @@ const Options = () => {
           I am client, hiring for work
         </div>
       </div>
-      <button
+      <button onClick={handleClick}
         className={
           option
             ? "mt-8 bg-white text-black px-4 py-2 rounded"
