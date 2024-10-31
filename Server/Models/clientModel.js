@@ -29,6 +29,10 @@ const Client=new Schema({
   },
   history:{
     type:[String]
+  },
+  address:{
+    type:String,
+    required:true
   }
 })
 

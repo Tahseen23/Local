@@ -39,6 +39,13 @@ const Worker=new Schema({
   },
   history:{
     type:[String]
+  },
+  bio:{
+    type:String
+  },
+  address:{
+    type:String,
+    required:true
   }
 })
 

@@ -18,12 +18,7 @@ const Options = () => {
   }
 
   const handleClick=()=>{
-    if (selectedOption==='client'){
-      navigate('/signup=client')
-    }
-    else if(selectedOption==='worker'){
-      navigate('/signup=worker')
-    }
+    navigate(`/signup=${selectedOption}`)
   }
 
   return (
