@@ -3,12 +3,57 @@ import { useNavigate } from 'react-router-dom'
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+
+
 const Login = () => {
   const navigate = useNavigate()
   const [showPass, setShowPass] = useState(false)
   const eyeToggle = () => {
     setShowPass(!showPass)
   }
+
+  const [loginInfo,setLogInInfo]=useState({
+    email:'',
+    password:''
+  })
+
+  const handleChange=(e)=>{
+    const {name,value}=e.target
+    const copyInfo={...loginInfo}
+    copyInfo[name]=value
+    setLogInInfo(copyInfo)
+  }
+
+  const handleLogIn=async(e)=>{
+    e.preventDefault()
+    const url='http://localhost:8080/auth/login'
+    const response=await fetch(url,{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json'
+      },
+      body: JSON.stringify(loginInfo)
+    })
+
+    const result=await response(loginInfo)
+    const { sucess, message, jwtToken, name, profile, email,role } = result
+
+    if (sucess){
+      localStorage.setItem('token',jwtToken)
+      localStorage.setItem('loggedInUser',name)
+      if (role==='worker'){
+        const array=email.split('@')
+        navigate('/user/'+array[0])
+
+      }
+      
+    }
+
+  }
+
+
+
+
   return (
     <div>
       <img src={logo} width={100} alt="" className="p-1 cursor-pointer" onClick={() => navigate('/')} />
@@ -18,13 +63,13 @@ const Login = () => {
           <form >
 
             <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-            <input className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-80 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="email" name="email" placeholder="Enter your email..." />
+            <input className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-80 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="email" name="email" placeholder="Enter your email..." value={loginInfo.email} onChange={handleChange} />
             <br />
 
             <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
             <div className="flex">
 
-              <input className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-80 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type={showPass ? "text" : "password"} name="password" placeholder="Enter your password" />
+              <input className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-80 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type={showPass ? "text" : "password"} name="password" placeholder="Enter your password" value={loginInfo.password} onChange={handleChange} />
 
               <div className="-ml-6 mt-3 cursor-pointer" onClick={eyeToggle}>
                 {showPass ?

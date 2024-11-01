@@ -5,6 +5,7 @@ import Home from "../Pages/Home";
 import App from "../App";
 import Options from "../Pages/Options";
 import {createBrowserRouter} from 'react-router-dom'
+import WorkerPage from "../Pages/WorkerPage";
 const router=createBrowserRouter([
   {
     path:'/',
@@ -29,6 +30,10 @@ const router=createBrowserRouter([
       {
         path:'/options',
         element:<Options />
+      },
+      {
+        path:'/user/:name',
+        element:<WorkerPage/>
       }
     ]
   }

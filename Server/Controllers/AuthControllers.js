@@ -27,11 +27,12 @@ const workerSignUp = async (req, res) => {
 
 
 
-    console.log(address)
-    console.log(getLocation(address))
-    console.log(location)
+    const coordinates = await getLocation(address); 
+    if (!coordinates) {
+      return res.status(400).json({ message: 'Invalid address or unable to get coordinates' });
+    }
+    const { latitude, longitude } = coordinates;
 
-    console.log(email, longitude)
 
     const locationUser = [latitude, longitude]
 
@@ -39,6 +40,7 @@ const workerSignUp = async (req, res) => {
     await workerUser.save()
 
     const newUser = new workermodel({ name, email, password, occupation, image: profile?.url || '', location: locationUser, address })
+    newUser.password=await bcrypt.hash(password,10)
     await newUser.save()
 
     return res.status(201).json({ message: 'SignUp success', success: true, profile })
@@ -70,19 +72,19 @@ const clientSignUp = async (req, res) => {
 
 
 
-    let latitude
-    let longitude
-    if (getLocation(address)) {
-      const location = getLocation(address)
-      latitude = location.latitude
-      longitude = location.longitude
+    const coordinates = await getLocation(address); 
+    if (!coordinates) {
+      return res.status(400).json({ message: 'Invalid address or unable to get coordinates' });
     }
+    const { latitude, longitude } = coordinates;
+
 
     const locationUser = [latitude, longitude]
     const clientUser = new RoleModel({ name, role: 'client' })
     await clientUser.save()
 
     const newUser = new clientModel({ name, email, password, image: profile?.url || '', location: locationUser, address })
+    newUser.password=await bcrypt.hash(password,10)
     await newUser.save()
 
     return res.status(201).json({ message: 'SignUp success', success: true, profile })
@@ -101,15 +103,19 @@ const clientSignUp = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password } = req.body
-    const user = await RoleModel.findOne({ email })
+    
+    let user = await RoleModel.findOne({ email })
     const errorMsg = 'Auth failed email or password is wrong'
     if (!user) {
       return res.status(400).json({ message: errorMsg, sucess: false })
     }
+    let role
     if (user.role === 'client') {
       user = await clientModel.findOne({ email })
+      role='client'
     } else if (user.role === 'worker') {
       user = await workermodel.findOne({ email })
+      role='worker'
     }
     const isPassEqual = await bcrypt.compare(password, user.password)
     if (!isPassEqual) {
@@ -121,7 +127,7 @@ const login = async (req, res) => {
       { expiresIn: '24h' }
     )
     const name = user.name
-    res.status(200).json({ message: 'Login sucesss', sucess: true, jwtToken, email, password, name, profile })
+    res.status(200).json({ message: 'Login sucesss', sucess: true, jwtToken, email, password, name, profile,role })
   } catch (err) {
     res.status(500).json({
       message: 'Internal Server Error',
@@ -137,10 +143,13 @@ async function getLocation(address) {
   const apikey = key; // Make sure to use your LocationIQ API key here
   const url = `https://us1.locationiq.com/v1/search.php?key=${apikey}&q=${encodeURIComponent(address)}&format=json`;
 
+
   try {
     const response = await axios.get(url, {
       headers: { accept: 'application/json' }
+      
     });
+    
 
     if (response.data && response.data.length > 0) {
       const location = response.data[0];
@@ -153,7 +162,7 @@ async function getLocation(address) {
       return false;
     }
   } catch (error) {
-    console.error('Error:', error.message);
+    console.log(error)
     return false;
   }
 }
