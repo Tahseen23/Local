@@ -5,7 +5,7 @@ import Home from "../Pages/Home";
 import App from "../App";
 import Options from "../Pages/Options";
 import {createBrowserRouter} from 'react-router-dom'
-import WorkerPage from "../Pages/WorkerPage";
+import DetailsPage from "../Pages/WorkerPage";
 const router=createBrowserRouter([
   {
     path:'/',
@@ -33,7 +33,7 @@ const router=createBrowserRouter([
       },
       {
         path:'/user/:name',
-        element:<WorkerPage/>
+        element:<DetailsPage/>
       }
     ]
   }

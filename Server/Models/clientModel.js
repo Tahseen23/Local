@@ -6,7 +6,12 @@ const Client=new Schema({
     type:String,
     required:true
   },
+  username:{
+    type:String,
+    required:true,
+    unique:true
 
+  },
   email:{
     type:String,
     required:true,
@@ -24,9 +29,7 @@ const Client=new Schema({
   location:{
     type:[Number]
   },
-  phoneNumber:{
-    type:Number
-  },
+  
   history:{
     type:[String]
   },

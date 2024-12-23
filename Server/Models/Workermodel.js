@@ -7,6 +7,13 @@ const Worker=new Schema({
     required:true
   },
 
+  username:{
+    type:String,
+    required:true,
+    unique:true
+
+  },
+
   email:{
     type:String,
     required:true,
@@ -31,11 +38,9 @@ const Worker=new Schema({
   location:{
     type:[Number]
   },
-  phoneNumber:{
-    type:Number
-  },
   price:{
-    type:Number
+    type:String,
+    required:true
   },
   history:{
     type:[String]

@@ -12,11 +12,13 @@ const key = process.env.API_KEY
 
 const workerSignUp = async (req, res) => {
   try {
-    const { name, email, password, occupation, address } = req.body
+    const { name,username, email, password, occupation, address,AddBio,price } = req.body
     const user = await RoleModel.findOne({ email });
     if (user) {
       return res.status(409).json({ message: 'User already exists' });
     }
+    console.log(name)
+
 
     let imageLocation
     let profile = ''
@@ -36,10 +38,10 @@ const workerSignUp = async (req, res) => {
 
     const locationUser = [latitude, longitude]
 
-    const workerUser = new RoleModel({ email, role: 'worker' })
+    const workerUser = new RoleModel({ email,username, role: 'worker' })
     await workerUser.save()
 
-    const newUser = new workermodel({ name, email, password, occupation, image: profile?.url || '', location: locationUser, address })
+    const newUser = new workermodel({ name,username, email, password, occupation, image: profile?.url || '', location: locationUser, address ,bio:AddBio,price})
     newUser.password=await bcrypt.hash(password,10)
     await newUser.save()
 
@@ -57,11 +59,12 @@ const workerSignUp = async (req, res) => {
 
 const clientSignUp = async (req, res) => {
   try {
-    const { name, email, password, address } = req.body
+    const { name,username, email, password, address } = req.body
     const user = await RoleModel.findOne({ email });
     if (user) {
       return res.status(409).json({ message: 'User already exists' });
     }
+    console.log(email)
 
     let imageLocation
     let profile = ''
@@ -69,8 +72,6 @@ const clientSignUp = async (req, res) => {
       imageLocation = req.files.image[0].path;
       profile = await uploadCloud(imageLocation);
     }
-
-
 
     const coordinates = await getLocation(address); 
     if (!coordinates) {
@@ -80,10 +81,10 @@ const clientSignUp = async (req, res) => {
 
 
     const locationUser = [latitude, longitude]
-    const clientUser = new RoleModel({ name, role: 'client' })
+    const clientUser = new RoleModel({ email,username, role: 'client' })
     await clientUser.save()
 
-    const newUser = new clientModel({ name, email, password, image: profile?.url || '', location: locationUser, address })
+    const newUser = new clientModel({ name,username, email, password, image: profile?.url || '', location: locationUser, address })
     newUser.password=await bcrypt.hash(password,10)
     await newUser.save()
 
@@ -127,7 +128,8 @@ const login = async (req, res) => {
       { expiresIn: '24h' }
     )
     const name = user.name
-    res.status(200).json({ message: 'Login sucesss', sucess: true, jwtToken, email, password, name, profile,role })
+    const username=user.username
+    res.status(200).json({ message: 'Login sucesss', sucess: true, jwtToken, email, password, name, profile,role,username })
   } catch (err) {
     res.status(500).json({
       message: 'Internal Server Error',

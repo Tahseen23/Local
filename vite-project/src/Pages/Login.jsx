@@ -36,14 +36,13 @@ const Login = () => {
     })
 
     const result=await response(loginInfo)
-    const { sucess, message, jwtToken, name, profile, email,role } = result
+    const { sucess, message, jwtToken, name, profile, email,role ,username} = result
 
     if (sucess){
       localStorage.setItem('token',jwtToken)
       localStorage.setItem('loggedInUser',name)
       if (role==='worker'){
-        const array=email.split('@')
-        navigate('/user/'+array[0])
+        navigate('/user/'+username)
 
       }
       
