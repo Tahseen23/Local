@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setisClient } from '../app/store/slice';
 
 
 const Login = () => {
@@ -11,6 +13,7 @@ const Login = () => {
   const eyeToggle = () => {
     setShowPass(!showPass)
   }
+  const dispatch=useDispatch()
 
   const [loginInfo,setLogInInfo]=useState({
     email:'',
@@ -42,7 +45,11 @@ const Login = () => {
       localStorage.setItem('token',jwtToken)
       localStorage.setItem('loggedInUser',name)
       if (role==='worker'){
+        dispatch(setisClient(false))
         navigate('/user/'+username)
+      }
+      else{
+        dispatch(setisClient(true))
 
       }
       
@@ -59,7 +66,7 @@ const Login = () => {
       <div className="flex flex-col justify-center items-center mt-28 gap-10">
         <h1 className="text-5xl">LogIn</h1>
         <div>
-          <form >
+          <form onSubmit={handleLogIn}>
 
             <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
             <input className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-80 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="email" name="email" placeholder="Enter your email..." value={loginInfo.email} onChange={handleChange} />

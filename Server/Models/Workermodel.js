@@ -51,6 +51,9 @@ const Worker=new Schema({
   address:{
     type:String,
     required:true
+  },
+  comments:{
+    type:[String]
   }
 })
 
