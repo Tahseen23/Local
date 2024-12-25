@@ -6,7 +6,8 @@ import { useSelector } from "react-redux"
 
 const DetailsPage = () => {
   const username = useParams()
-  const isClient=useSelector(state=>state.sliceData.isClient)
+  const client=useSelector(state=>state.sliceData)
+  console.log(client)
 
 
   const [result, setResult] = useState(null);
@@ -38,7 +39,7 @@ const DetailsPage = () => {
     }
   }, [username]);
 
-  console.log(result)
+  // console.log(result)
 
 
 

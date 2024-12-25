@@ -1,22 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState={
-  isProfile:false,
-  isProfileLink:null,
-  username:'',
-  bio:'',
-  occupation:'',
-  ratings:'',
-  price:'',
-  email:'',
-  name:'',
-  comments:[],
-  history:[],
-  isClient:false
-}
+const initialState = {
+  isProfile: false,
+  isProfileLink: null,
+  username: '',
+  bio: '',
+  occupation: '',
+  ratings: '',
+  price: '',
+  email: '',
+  name: '',
+  comments: [],
+  history: [],
+  isClient: false
+};
 
 export const slice=createSlice({
-  name:'slice',
+  name:'sliceData',
   initialState,
   reducers:{
     setEmail:(state,action)=>{
