@@ -4,10 +4,9 @@ import { useState } from "react"
 import logo from "../logo/logo.bmp"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
+const ClientPage=()=>{
 
-const DetailsPage = () => {
   const username = useParams()
-  const client = useSelector(state => state.sliceData.isClient)
   const navigate = useNavigate()
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -66,22 +65,16 @@ const DetailsPage = () => {
           </div>
           <div className="h-80">
             <div className="flex flex-row gap-40 align-middle">
-              <h1 className="text-5xl pb-2">{result.user.name} <span className="text-lg">{result.user.occupation}</span></h1>
-            {client&& <div>
-              <button className="bg-red-600 w-24 h-8 rounded-md">Book</button>
-              </div>}
-             
-
+              <h1 className="text-5xl pb-2">{result.user.name} </h1>
             </div>
-            <h1>{result.user.bio}</h1>
             <br />
-            <h1>Price: {result.user.price} per visit</h1>
             <h1>Email: {result.user.email}</h1>
+            <br />
             <h1>Address: {result.user.address}</h1>
 
           </div>
           <div className="flex flex-col pt-10">
-            <h1 className="text-5xl">Comments</h1>
+            <h1 className="text-5xl">Past Workers</h1>
           </div>
         </div>
       </div> :
@@ -92,9 +85,6 @@ const DetailsPage = () => {
   )
 
 
-
-
-
 }
 
-export default DetailsPage
+export default ClientPage

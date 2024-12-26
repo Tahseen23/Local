@@ -12,7 +12,7 @@ const initialState = {
   name: '',
   comments: [],
   history: [],
-  isClient: false
+  isClient: true
 };
 
 export const slice=createSlice({
@@ -28,7 +28,7 @@ export const slice=createSlice({
     setname:(state,action)=>{
       state.name=action.payload
     },
-    isProfile:(state,action)=>{
+    setisProfile:(state,action)=>{
       state.isProfile=action.payload
     },
     setisProfileLink:(state,action)=>{

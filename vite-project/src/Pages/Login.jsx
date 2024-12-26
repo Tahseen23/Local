@@ -4,7 +4,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setisClient } from '../app/store/slice';
+import { setisClient, setisProfile, setisProfileLink, setusername } from '../app/store/slice.js';
 
 
 const Login = () => {
@@ -38,18 +38,30 @@ const Login = () => {
       body: JSON.stringify(loginInfo)
     })
 
-    const result=await response(loginInfo)
-    const { sucess, message, jwtToken, name, profile, email,role ,username} = result
+    const result=await response.json()
+    const { sucess, message, jwtToken, profile, email,role ,username} = result
+    console.log(profile)
 
     if (sucess){
       localStorage.setItem('token',jwtToken)
-      localStorage.setItem('loggedInUser',name)
+      localStorage.setItem('loggedInUser',username)
+      dispatch(setusername(username))
+
+      if (profile.length!=0){
+        dispatch(setisProfile(true))
+        dispatch(setisProfileLink(profile))
+      }else{
+        dispatch(setisProfile(false))
+      }
+
+
       if (role==='worker'){
         dispatch(setisClient(false))
         navigate('/user/'+username)
       }
       else{
         dispatch(setisClient(true))
+        navigate('/')
 
       }
       

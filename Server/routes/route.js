@@ -1,6 +1,7 @@
 const {login, workerSignUp, clientSignUp} =require('../Controllers/AuthControllers.js')
-const {getDetails}=require('../Controllers/getDetails.js')
+const {getDetails,getRole}=require('../Controllers/getDetails.js')
 const upload=require('../Middleware/multer.js')
+const ensure=require('../Middleware/authMiddle.js')
 
 const router=require('express').Router()
 
@@ -25,5 +26,6 @@ router.route('/signup=worker').post(
 ]),
   workerSignUp
 );
-router.route('/user/:email').get(getDetails)
+router.route('/user/:username').get(ensure,getDetails)
+router.route('/role/:username').get(ensure,getRole)
 module.exports=router

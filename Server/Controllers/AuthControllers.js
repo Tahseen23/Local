@@ -88,7 +88,7 @@ const clientSignUp = async (req, res) => {
     newUser.password=await bcrypt.hash(password,10)
     await newUser.save()
 
-    return res.status(201).json({ message: 'SignUp success', success: true, profile })
+    return res.status(201).json({ message: 'SignUp success', success: true })
 
   } catch (err) {
     console.error(err);

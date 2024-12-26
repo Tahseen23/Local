@@ -6,6 +6,7 @@ import App from "../App";
 import Options from "../Pages/Options";
 import {createBrowserRouter} from 'react-router-dom'
 import DetailsPage from "../Pages/WorkerPage";
+import Intermediate from "../Components/Intermediate";
 const router=createBrowserRouter([
   {
     path:'/',
@@ -33,7 +34,7 @@ const router=createBrowserRouter([
       },
       {
         path:'/user/:name',
-        element:<DetailsPage/>
+        element:<Intermediate/>
       }
     ]
   }
