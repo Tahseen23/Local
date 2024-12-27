@@ -130,7 +130,7 @@ const DetailsPage = () => {
     }
   }, [username]);
 
-  console.log(comm)
+  // console.log(comm)
 
 
 
