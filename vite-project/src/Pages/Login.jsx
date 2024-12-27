@@ -39,7 +39,8 @@ const Login = () => {
         }
       })
       const data=await response.json()
-      setHistory(data.history)
+      console.log(data)
+      dispatch(setHistory(data.history))
     }catch{
       console.log('Some Error Occured')
     }

@@ -59,8 +59,8 @@ const WokerSignUp = () => {
 
       const result = await response.json()
 
-      const { sucess, message } = result
-      if (sucess) {
+      const { success, message } = result
+      if (success) {
         navigate('/login')
       } else {
         console.log(message)

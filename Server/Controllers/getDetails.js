@@ -39,9 +39,7 @@ const getHistory=async(req,res)=>{
 
 const addWorker=async(req,res)=>{
   const {username,profile,name,role,client}=req.body
-  console.log(client)
   const user=await clientModel.findOne({username:client})
-  console.log(user)
   const newDate={
     username:username,
     profile:profile,
@@ -53,4 +51,28 @@ const addWorker=async(req,res)=>{
   return res.status(200).json({mark:user.history})
 }
 
-module.exports={getDetails,getRole,getHistory,addWorker}
+const getComments=async(req,res)=>{
+  const username=req.params.username
+  const user=await workermodel.findOne({username})
+  const comments=user.comments
+  return res.status(200).json({comments:comments})
+
+}
+
+const addComments=async(req,res)=>{
+  const {username,text,worker}=req.body
+  const user=await workermodel.findOne({username:worker})
+  const now=new Date()
+  const formattedDate = now.toISOString().slice(0, 19);
+  const newData={
+    username:username,
+    text:text,
+    date:formattedDate
+  }
+  user.comments.push(newData)
+  user.save()
+  return res.status(200).json({mark:user.comments})
+
+}
+
+module.exports={getDetails,getRole,getHistory,addWorker,getComments,addComments}

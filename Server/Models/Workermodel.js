@@ -52,9 +52,13 @@ const Worker=new Schema({
     type:String,
     required:true
   },
-  comments:{
-    type:[String]
-  }
+  comments:[
+    {
+      username:String,
+      text:String,
+      date:'String'
+    }
+  ]
 })
 
 const WorkerModel=mongoose.model('worker',Worker)
