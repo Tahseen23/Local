@@ -12,7 +12,8 @@ const initialState = {
   name: '',
   comments: [],
   history: [],
-  isClient: true
+  isClient: true,
+  isUserNamePresent:false
 };
 
 export const slice=createSlice({
@@ -54,11 +55,14 @@ export const slice=createSlice({
     },
     setisClient:(state,action)=>{
       state.isClient=action.payload
+    },
+    setisUserNamePresent:(state,action)=>{
+      state.isUserNamePresent=action.payload
     }
   }
 
 })
 
-export const {setEmail,setprice,setratings,setoccupation,setbio,setisProfileLink,setisProfile,setusername,setname,setHistory,setComments,setisClient}=slice.actions
+export const {setEmail,setprice,setratings,setoccupation,setbio,setisProfileLink,setisProfile,setusername,setname,setHistory,setComments,setisClient,setisUserNamePresent}=slice.actions
 
 export default slice.reducer

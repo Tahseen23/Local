@@ -30,9 +30,14 @@ const Client=new Schema({
     type:[Number]
   },
   
-  history:{
-    type:[String]
-  },
+  history:[
+    {
+      profile:String,
+      name:String,
+      username:String,
+      role:String
+    }
+  ],
   address:{
     type:String,
     required:true

@@ -4,7 +4,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setisClient, setisProfile, setisProfileLink, setusername } from '../app/store/slice.js';
+import { setHistory, setisClient, setisProfile, setisProfileLink, setusername } from '../app/store/slice.js';
 
 
 const Login = () => {
@@ -25,6 +25,24 @@ const Login = () => {
     const copyInfo={...loginInfo}
     copyInfo[name]=value
     setLogInInfo(copyInfo)
+  }
+
+  async function getHistory(username){
+    try{
+      const token=localStorage.getItem('token')
+      const url=`http://localhost:8080/auth/role/history/${username}`
+      const response=await fetch(url,{
+        method:'GET',
+        headers:{
+          'Content-Type':'application/json',
+          'authorization': `Bearer ${token}`
+        }
+      })
+      const data=await response.json()
+      setHistory(data.history)
+    }catch{
+      console.log('Some Error Occured')
+    }
   }
 
   const handleLogIn=async(e)=>{
@@ -61,6 +79,7 @@ const Login = () => {
       }
       else{
         dispatch(setisClient(true))
+        getHistory(username)
         navigate('/')
 
       }

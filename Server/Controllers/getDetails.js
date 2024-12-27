@@ -28,4 +28,29 @@ const getRole=async(req,res)=>{
 
 }
 
-module.exports={getDetails,getRole}
+const getHistory=async(req,res)=>{
+  const username=req.params.username
+  const user=await clientModel.findOne({username})
+  const history=user.history
+  return res.status(200).json({'history':history})
+  
+}
+
+
+const addWorker=async(req,res)=>{
+  const {username,profile,name,role,client}=req.body
+  console.log(client)
+  const user=await clientModel.findOne({username:client})
+  console.log(user)
+  const newDate={
+    username:username,
+    profile:profile,
+    name:name,
+    role:role
+  }
+  user.history.push(newDate)
+  user.save()
+  return res.status(200).json({mark:user.history})
+}
+
+module.exports={getDetails,getRole,getHistory,addWorker}

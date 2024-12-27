@@ -2,19 +2,28 @@ import { useParams } from "react-router-dom"
 import { useEffect } from "react"
 import { useState } from "react"
 import logo from "../logo/logo.bmp"
-import { useSelector } from "react-redux"
+import { useSelector,useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { setHistory } from "../app/store/slice"
 
 const DetailsPage = () => {
   const username = useParams()
+  const dispatch=useDispatch()
   const client = useSelector(state => state.sliceData.isClient)
+  const userClient=useSelector(state=>state.sliceData.username)
   const navigate = useNavigate()
+  const history=useSelector(state=>state.sliceData.history)
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (! token) {
       navigate('/login');
     }
   }, [navigate]);
+  console.log(history)
+
+
+  const isPresent = history.some(worker => worker.username === username.name);
+  console.log(isPresent)
 
   const [result, setResult] = useState(null);
 
@@ -40,6 +49,27 @@ const DetailsPage = () => {
       console.error("Error fetching data:", error);
     }
   };
+
+
+  const handleAdd=async()=>{
+    console.log(result)
+    const newWorker={profile:result.user.image,role:result.user.occupation,name:result.user.name,username:result.user.username,client:userClient}
+    console.log( newWorker)
+    const token=localStorage.getItem('token');
+    const url='http://localhost:8080/auth/role/addWorker'
+    const response=await fetch(url,{
+      method:'PUT',
+      headers:{
+        'Content-Type':'application/json',
+          'authorization': `Bearer ${token}`
+      },
+      body:JSON.stringify(newWorker)
+    })
+    const res=await response.json()
+    dispatch(setHistory(res.mark))
+    
+  }
+
 
   useEffect(() => {
     if (username?.name) {
@@ -67,9 +97,18 @@ const DetailsPage = () => {
           <div className="h-80">
             <div className="flex flex-row gap-40 align-middle">
               <h1 className="text-5xl pb-2">{result.user.name} <span className="text-lg">{result.user.occupation}</span></h1>
-            {client&& <div>
-              <button className="bg-red-600 w-24 h-8 rounded-md">Book</button>
-              </div>}
+              {client && (
+                <div>
+                  {isPresent ? (
+                    <button  className="bg-gray-400 w-24 h-8 rounded-md cursor-not-allowed">
+                       Booked
+                    </button>
+                  ) : (
+                    <button onClick={handleAdd} className="bg-red-600 w-24 h-8 rounded-md">Book</button>
+                  )}
+                </div>
+              )}
+
              
 
             </div>
