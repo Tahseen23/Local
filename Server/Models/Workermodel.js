@@ -58,6 +58,13 @@ const Worker=new Schema({
       text:String,
       date:'String'
     }
+  ],
+  jobs:[
+    {
+      username:String,
+      address:String,
+      date:'String'
+    }
   ]
 })
 

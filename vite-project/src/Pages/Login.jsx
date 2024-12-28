@@ -4,7 +4,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setHistory, setisClient, setisProfile, setisProfileLink, setusername } from '../app/store/slice.js';
+import { setaddress, setHistory, setisClient, setisProfile, setisProfileLink, setname, setusername } from '../app/store/slice.js';
 
 
 const Login = () => {
@@ -58,13 +58,15 @@ const Login = () => {
     })
 
     const result=await response.json()
-    const { sucess, message, jwtToken, profile, email,role ,username} = result
+    const { sucess, message, jwtToken, profile, email,role ,username,address,name} = result
     console.log(profile)
 
     if (sucess){
       localStorage.setItem('token',jwtToken)
       localStorage.setItem('loggedInUser',username)
       dispatch(setusername(username))
+      dispatch(setname(name))
+      dispatch(setaddress(address))
 
       if (profile.length!=0){
         dispatch(setisProfile(true))

@@ -75,4 +75,29 @@ const addComments=async(req,res)=>{
 
 }
 
-module.exports={getDetails,getRole,getHistory,addWorker,getComments,addComments}
+const getJobs=async(req,res)=>{
+  const username=req.params.username
+  const user=await workermodel.findOne({username})
+  const jobs=user.jobs
+  return res.status(200).json({jobs:jobs})
+
+}
+
+
+const addJob=async(req,res)=>{
+  const {username,name,address,client}=req.body
+  const user=await workermodel.findOne({username:client})
+  const now=new Date()
+  const formattedDate = now.toISOString().slice(0, 10);
+  const newDate={
+    username:username,
+    name:name,
+    role:address,
+    date:formattedDate
+  }
+  user.jobs.push(newDate)
+  user.save()
+  return res.status(200).json({mark:user.jobs})
+}
+
+module.exports={getDetails,getRole,getHistory,addWorker,getComments,addComments,getJobs,addJob}

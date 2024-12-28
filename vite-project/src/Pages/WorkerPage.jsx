@@ -13,6 +13,8 @@ const DetailsPage = () => {
   const dispatch = useDispatch()
   const client = useSelector(state => state.sliceData.isClient)
   const userClient = useSelector(state => state.sliceData.username)
+  const name = useSelector(state => state.sliceData.name)
+  const address = useSelector(state => state.sliceData.address)
   const navigate = useNavigate()
   const history = useSelector(state => state.sliceData.history)
   useEffect(() => {
@@ -99,7 +101,24 @@ const DetailsPage = () => {
     })
     const res = await response.json()
     dispatch(setHistory(res.mark))
+    addJob()
+  }
 
+
+  const addJob = async () => {
+    const newJob={address:address,name:name,client:result.user.username,username:userClient}
+    console.log(newJob)
+    const token = localStorage.getItem('token');
+    const url = 'http://localhost:8080/auth/role/addjobs'
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(newJob)
+    })
+    const res = await response.json()
   }
 
   const handleAddComments = async () => {
@@ -185,8 +204,18 @@ const DetailsPage = () => {
                   </div>}
 
                 <div>
-                  <h3>Hello</h3>
-                  <h3>Hi</h3>
+                {comm && comm.map((item, index) => (
+                  <div className="flex flex-col p-3 ">
+                    <div className="p-2 bg-slate-600 rounded flex flex-row gap-2 ">
+                      <p key={index+Math.random()}>{item.username} :</p>
+                      <h1 key={index+Math.random()}> {item.text} 
+                      </h1>
+                    </div>
+                    
+                  </div>
+
+                ))}
+
                 </div>
 
 

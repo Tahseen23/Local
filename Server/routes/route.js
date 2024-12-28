@@ -1,5 +1,5 @@
 const {login, workerSignUp, clientSignUp} =require('../Controllers/AuthControllers.js')
-const {getDetails,getRole,getHistory,addWorker,getComments,addComments}=require('../Controllers/getDetails.js')
+const {getDetails,getRole,getHistory,addWorker,getComments,addComments,getJobs,addJob}=require('../Controllers/getDetails.js')
 const upload=require('../Middleware/multer.js')
 const ensure=require('../Middleware/authMiddle.js')
 
@@ -30,6 +30,8 @@ router.route('/user/:username').get(ensure,getDetails)
 router.route('/role/:username').get(ensure,getRole)
 router.route('/role/history/:username').get(ensure,getHistory)
 router.route('/role/comments/:username').get(ensure,getComments)
+router.route('/role/jobs/:username').get(ensure,getJobs)
 router.route('/role/addWorker').put(ensure,addWorker)
 router.route('/role/addComments').put(ensure,addComments)
+router.route('/role/addjobs').put(ensure,addJob)
 module.exports=router

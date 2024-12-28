@@ -129,7 +129,7 @@ const login = async (req, res) => {
     )
     const name = user.name
     const username=user.username
-    res.status(200).json({ message: 'Login sucesss', sucess: true, jwtToken, email, password, name, profile,role,username })
+    res.status(200).json({ message: 'Login sucesss', sucess: true, jwtToken, email, password, name, profile,role,username,address,name })
   } catch (err) {
     res.status(500).json({
       message: 'Internal Server Error',

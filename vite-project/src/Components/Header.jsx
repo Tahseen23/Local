@@ -7,6 +7,7 @@ import Example from "./DropDown"
 const Header = () => {
   const navigate = useNavigate()
   const client = useSelector(state => state.sliceData.isClient)
+  const username = useSelector(state => state.sliceData.username)
   const token=localStorage.getItem('token')
   const [user,setUser]=useState(false)
   useEffect(() => {
@@ -28,8 +29,18 @@ const Header = () => {
           }} />
 
           {user?
-          <div className="p-4">
-            <Example />
+          <div className="flex flex-row gap-2 ">
+            {
+              !client&&
+              <div className="pt-4">
+                <button className=" border border-white  rounded h-9 hover:text-fuchsia-700  w-20 " onClick={()=>navigate(`/user/jobs/${username}`)} >Jobs</button>
+              </div>
+              
+            }
+
+            <div className="p-4">
+              <Example />
+            </div>
           </div>
           
         :<div className="flex flex-row gap-5 mr-5">
