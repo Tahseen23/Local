@@ -59,7 +59,7 @@ const Login = () => {
 
     const result=await response.json()
     const { sucess, message, jwtToken, profile, email,role ,username,address,name} = result
-    console.log(profile)
+
 
     if (sucess){
       localStorage.setItem('token',jwtToken)

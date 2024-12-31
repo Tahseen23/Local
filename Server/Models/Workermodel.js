@@ -63,7 +63,11 @@ const Worker=new Schema({
     {
       username:String,
       address:String,
-      date:'String'
+      name:String,
+      profile:String,
+      date:'String',
+      profileLink:String,
+      completed:Boolean
     }
   ]
 })

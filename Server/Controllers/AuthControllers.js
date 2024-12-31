@@ -105,7 +105,9 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body
     
+    
     let user = await RoleModel.findOne({ email })
+    
     const errorMsg = 'Auth failed email or password is wrong'
     if (!user) {
       return res.status(400).json({ message: errorMsg, sucess: false })
@@ -118,10 +120,12 @@ const login = async (req, res) => {
       user = await workermodel.findOne({ email })
       role='worker'
     }
+    
     const isPassEqual = await bcrypt.compare(password, user.password)
     if (!isPassEqual) {
       return res.status(403).json({ message: errorMsg, sucess: false })
     }
+    
     const profile = user.image
     const jwtToken = jwt.sign({ email: user.email, _id: user._id },
       process.env.JWT_SECRET,
@@ -129,10 +133,12 @@ const login = async (req, res) => {
     )
     const name = user.name
     const username=user.username
-    res.status(200).json({ message: 'Login sucesss', sucess: true, jwtToken, email, password, name, profile,role,username,address,name })
+    const address=user.address
+    res.status(200).json({ message: 'Login sucesss', sucess: true, jwtToken, email, profile,role,username,address,name })
   } catch (err) {
+    console.log(err)
     res.status(500).json({
-      message: 'Internal Server Error',
+      message: err,
       sucess: false
     })
 
