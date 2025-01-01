@@ -27,24 +27,7 @@ const Login = () => {
     setLogInInfo(copyInfo)
   }
 
-  async function getHistory(username){
-    try{
-      const token=localStorage.getItem('token')
-      const url=`http://localhost:8080/auth/role/history/${username}`
-      const response=await fetch(url,{
-        method:'GET',
-        headers:{
-          'Content-Type':'application/json',
-          'authorization': `Bearer ${token}`
-        }
-      })
-      const data=await response.json()
-      console.log(data)
-      dispatch(setHistory(data.history))
-    }catch{
-      console.log('Some Error Occured')
-    }
-  }
+
 
   const handleLogIn=async(e)=>{
     e.preventDefault()
@@ -82,7 +65,6 @@ const Login = () => {
       }
       else{
         dispatch(setisClient(true))
-        getHistory(username)
         navigate('/')
 
       }

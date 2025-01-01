@@ -35,7 +35,9 @@ const Client=new Schema({
       profile:String,
       name:String,
       username:String,
-      role:String
+      role:String,
+      completed:Boolean,
+      date: String
     }
   ],
   address:{

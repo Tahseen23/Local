@@ -12,6 +12,7 @@ const DetailsPage = () => {
   const [comm, setComm] = useState(null)
   const [text, setText] = useState('')
   const [jobs, setJobs] = useState('')
+  const [history,setHistory]=useState('')
   const dispatch = useDispatch()
   const profileLink = useSelector(state => state.sliceData.isProfileLink)
   const client = useSelector(state => state.sliceData.isClient)
@@ -19,7 +20,6 @@ const DetailsPage = () => {
   const name = useSelector(state => state.sliceData.name)
   const address = useSelector(state => state.sliceData.address)
   const navigate = useNavigate()
-  const history = useSelector(state => state.sliceData.history)
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -29,8 +29,32 @@ const DetailsPage = () => {
   // console.log(history)
 
 
-  const isPresent = history.some(worker => worker.username === username.name);
-  // console.log(isPresent)
+  async function getHistory(username){
+    try{
+      const token=localStorage.getItem('token')
+      const url=`http://localhost:8080/auth/role/history/${username}`
+      const response=await fetch(url,{
+        method:'GET',
+        headers:{
+          'Content-Type':'application/json',
+          'authorization': `Bearer ${token}`
+        }
+      })
+      const data=await response.json()
+      // console.log(data)
+      setHistory(data.history)
+    }catch{
+      console.log('Some Error Occured')
+    }
+  }
+
+
+
+  let isPresent = history && history.some(worker => worker.username === username.name);
+
+  
+
+  
 
   const handleChange = (e) => {
     const text = e.target.value;
@@ -103,7 +127,6 @@ const DetailsPage = () => {
       body: JSON.stringify(newWorker)
     })
     const res = await response.json()
-    dispatch(setHistory(res.mark))
     addJob()
   }
 
@@ -122,6 +145,7 @@ const DetailsPage = () => {
       body: JSON.stringify(newJob)
     })
     const res = await response.json()
+    location.reload()
   }
 
   const handleAddComments = async () => {
@@ -172,10 +196,25 @@ const DetailsPage = () => {
       getData();
       getComments()
       getJobs()
+      getHistory(userClient)
+      
     }
-  }, [username]);
+  }, []);
 
-  // console.log(comm)
+  console.log(isPresent)
+
+  if (isPresent){
+    const obj=history.filter(worker=>worker.username===username.name)
+    obj.sort((a, b) => new Date(b.date) - new Date(a.date))
+    console.log(obj)
+    if (obj && obj[0].completed){
+      isPresent=false
+    }else{
+      isPresent=true
+    }
+
+  }
+
 
 
 

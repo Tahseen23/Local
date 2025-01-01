@@ -40,11 +40,15 @@ const getHistory=async(req,res)=>{
 const addWorker=async(req,res)=>{
   const {username,profile,name,role,client}=req.body
   const user=await clientModel.findOne({username:client})
+  const now=new Date()
+  const formattedDate = now.toISOString().slice(0, 19);
   const newDate={
     username:username,
     profile:profile,
     name:name,
-    role:role
+    role:role,
+    completed:false,
+    date:formattedDate
   }
   user.history.push(newDate)
   user.save()
