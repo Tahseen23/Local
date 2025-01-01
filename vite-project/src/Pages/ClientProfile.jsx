@@ -4,13 +4,15 @@ import { useState } from "react"
 import logo from "../logo/logo.bmp"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-const ClientPage=()=>{
+import { Link } from "react-router-dom"
+const ClientPage = () => {
 
   const username = useParams()
   const navigate = useNavigate()
+  const [history, setHistory] = useState(null)
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if (! token) {
+    if (!token) {
       navigate('/login');
     }
   }, [navigate]);
@@ -40,13 +42,36 @@ const ClientPage=()=>{
     }
   };
 
+
+  async function getHistory(username) {
+    try {
+      const token = localStorage.getItem('token')
+      const url = `http://localhost:8080/auth/role/history/${username}`
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'authorization': `Bearer ${token}`
+        }
+      })
+      const data = await response.json()
+      // console.log(data)
+      setHistory(data.history)
+    } catch {
+      console.log('Some Error Occured')
+    }
+  }
+
   useEffect(() => {
     if (username?.name) {
+
+
       getData();
+      getHistory(username.name)
     }
   }, [username]);
 
-  // console.log(result)
+  console.log(history)
 
 
 
@@ -74,7 +99,29 @@ const ClientPage=()=>{
 
           </div>
           <div className="flex flex-col pt-10">
-            <h1 className="text-5xl">Past Workers</h1>
+            <h1 className="text-5xl p-2">Past Workers</h1>
+
+            <div className=" p-2">
+              {history && history.map((item, index) => (
+                <div  className="flex flex-col p-3 bg-slate-600 rounded ">
+                  <div className="flex flex-row gap-5  ">
+                    {item.profile.length != 0 ? (
+                      <img src={item.profile} alt="" className="w-10 h-15" />
+                    ) : (
+                      <img src={logo} alt="" className="w-20 h-25" />
+                    )}
+
+                    <div className="flex flex-col gap-4">
+                      <div key={index + Math.random()} className="text-2xl">{item.name}</div>
+                    </div>
+                  </div>
+
+                </div>
+
+              ))}
+
+
+            </div>
           </div>
         </div>
       </div> :

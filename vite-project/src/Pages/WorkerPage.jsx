@@ -26,13 +26,13 @@ const DetailsPage = () => {
       navigate('/login');
     }
   }, [navigate]);
-  // console.log(history)
+  console.log(userClient)
 
 
-  async function getHistory(username){
+   async function getHistory(name){
     try{
       const token=localStorage.getItem('token')
-      const url=`http://localhost:8080/auth/role/history/${username}`
+      const url=`http://localhost:8080/auth/role/history/${name}`
       const response=await fetch(url,{
         method:'GET',
         headers:{
@@ -196,12 +196,16 @@ const DetailsPage = () => {
       getData();
       getComments()
       getJobs()
-      getHistory(userClient)
+      if (client){
+        getHistory(userClient)
+      }
+      
       
     }
   }, []);
 
-  console.log(isPresent)
+
+  console.log(userClient)
 
   if (isPresent){
     const obj=history.filter(worker=>worker.username===username.name)

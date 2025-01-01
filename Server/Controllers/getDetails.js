@@ -30,7 +30,9 @@ const getRole=async(req,res)=>{
 
 const getHistory=async(req,res)=>{
   const username=req.params.username
+  console.log(username)
   const user=await clientModel.findOne({username})
+  console.log(user)
   const history=user.history
   return res.status(200).json({'history':history})
   
@@ -109,12 +111,17 @@ const addJob=async(req,res)=>{
 const addComplete=async(req,res)=>{
   const {username,client}=req.body
   const user=await workermodel.findOne({username})
+  const another=await clientModel.findOne({username:client})
+  const history=another.history.filter(history=>history.username==username)
+  history.sort((a, b) => new Date(b.date) - new Date(a.date))
   
   const target=user.jobs.find(job => job.username === client);
+  history[0].completed=true
   
   target.completed=true
   user.save()
   console.log(user)
+  another.save()
   return res.status(200).json({mark:user.jobs})
 }
 
