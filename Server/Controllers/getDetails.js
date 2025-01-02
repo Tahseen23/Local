@@ -50,7 +50,9 @@ const addWorker=async(req,res)=>{
     name:name,
     role:role,
     completed:false,
-    date:formattedDate
+    date:formattedDate,
+    ratings:0,
+    rated:false
   }
   user.history.push(newDate)
   user.save()
@@ -101,7 +103,9 @@ const addJob=async(req,res)=>{
     address:address,
     date:formattedDate,
     profileLink:profileLink,
-    completed:false
+    completed:false,
+    ratings:0,
+    rated:false
   }
   user.jobs.push(newDate)
   user.save()
@@ -125,4 +129,25 @@ const addComplete=async(req,res)=>{
   return res.status(200).json({mark:user.jobs})
 }
 
-module.exports={getDetails,getRole,getHistory,addWorker,getComments,addComments,getJobs,addJob,addComplete}
+const addRatings=async(req,res)=>{
+  const {client,worker,ratings,date}=req.body
+  const c=await clientModel.find({username:client})
+  const w=await workermodel.find({username:worker})
+  const jobs= w.jobs.filter(
+    (item) => item.username === client && item.date === date && item.completed
+  );
+  jobs.ratings=Math.abs(ratings)%5
+  w.ratings=(w.ratings*5+Math.abs(ratings)%5)/5
+  w.jobs.rated=true
+  w.save()
+  const his=c.history.filter(
+    (item) => item.username === worker && item.date === date && item.completed
+  );
+  c.history.rated=true
+  his.ratings=Math.abs(ratings)%5
+  c.save()
+  return res.status(200)
+
+}
+
+module.exports={getDetails,getRole,getHistory,addWorker,getComments,addComments,getJobs,addJob,addComplete,addRatings}

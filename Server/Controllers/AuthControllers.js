@@ -41,7 +41,7 @@ const workerSignUp = async (req, res) => {
     const workerUser = new RoleModel({ email,username, role: 'worker' })
     await workerUser.save()
 
-    const newUser = new workermodel({ name,username, email, password, occupation, image: profile?.url || '', location: locationUser, address ,bio:AddBio,price})
+    const newUser = new workermodel({ name,username, email, password, occupation, image: profile?.url || '', location: locationUser, address ,bio:AddBio,price,ratings:0})
     newUser.password=await bcrypt.hash(password,10)
     await newUser.save()
 

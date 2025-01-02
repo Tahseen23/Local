@@ -67,7 +67,9 @@ const Worker=new Schema({
       profile:String,
       date:'String',
       profileLink:String,
-      completed:Boolean
+      completed:Boolean,
+      ratings:Number,
+      rated:Boolean
     }
   ]
 })
