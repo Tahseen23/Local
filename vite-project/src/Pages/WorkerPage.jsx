@@ -205,7 +205,7 @@ const DetailsPage = () => {
   }, []);
 
 
-  console.log(userClient)
+  // console.log(result)
 
   if (isPresent){
     const obj=history.filter(worker=>worker.username===username.name)
@@ -258,6 +258,7 @@ const DetailsPage = () => {
             <h1>Price: {result.user.price} per visit</h1>
             <h1>Email: {result.user.email}</h1>
             <h1>Address: {result.user.address}</h1>
+            <h1>Ratings: {result.user.ratings}</h1>
 
           </div>
           <div className="border pt-10">
@@ -315,7 +316,14 @@ const DetailsPage = () => {
                         )}
 
                         <div className="flex flex-col gap-4">
+                          <div className="flex flex-row gap-10">
                           <div key={index + Math.random()} className="text-2xl">{item.name}</div>
+                          <div key={index + Math.random()} className="text-xl">{item.date}</div>
+                          {item.rated && (
+                            <div key={index + Math.random()} className="text-2xl">{item.ratings}</div>
+                          )}
+                          </div>
+                          
                         </div>
                       </div>
 

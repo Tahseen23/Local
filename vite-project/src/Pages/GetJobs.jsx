@@ -67,7 +67,7 @@ const GetJobs = () => {
           <div className="flex flex-col gap-4">
             <div key={index+Math.random()} className="text-3xl">{item.name}</div>
             <div  key={index+Math.random()} className="text-1xl">{item.address}</div>
-            <div  key={index+Math.random()} className="text-1xl">{item.date}</div>
+            <div  key={index+Math.random()} className="text-1xl">{item.date.slice(0,10)}</div>
           </div>
         </div>
         <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={()=>completeClick(item.username)}>Completed</button>

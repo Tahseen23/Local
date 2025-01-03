@@ -8,7 +8,7 @@ import { Link } from "react-router-dom"
 const ClientPage = () => {
 
   const username = useParams()
-  const [ratings,setRating]=useState(0)
+  const [ratings,setRating]=useState({})
   const name=useSelector(state => state.sliceData.username)
   // console.log(name)
   const navigate = useNavigate()
@@ -45,10 +45,12 @@ const ClientPage = () => {
     }
   };
 
-  const handleChange = (e) => {
-    setRating(e.target.value); // Update state with input value
+  const handleChange = (username,date, value) => {
+    setRating((prevRatings) => ({
+      ...prevRatings,
+      [`${username}_${date}`]: value, // Update only the specific item's rating
+    }));
   };
-
 
   async function getHistory(username) {
     try {
@@ -83,7 +85,7 @@ const ClientPage = () => {
    console.log(history)
 
   async function addRatings(worker,date) {
-    const data={client:name,worker:name,date:date,ratings:ratings}
+    const data={client:name,worker:worker,date:date,ratings:ratings}
     const token = localStorage.getItem('token');
     const url = 'http://localhost:8080/auth/role/addRatings'
     const response = await fetch(url, {
@@ -92,7 +94,7 @@ const ClientPage = () => {
         'Content-Type': 'application/json',
         'authorization': `Bearer ${token}`
       },
-      body: JSON.stringify(newJob)
+      body: JSON.stringify(data)
     })
     const res = await response.json()
     location.reload()
@@ -143,14 +145,20 @@ const ClientPage = () => {
                     <div className="flex flex-row gap-40">
                       <div key={index + Math.random()} className="text-2xl">{item.name}</div>
                       <div key={index + Math.random()} className="text-xl">{item.date.slice(0,10)}</div>
-                      {!item.rated ? (
+                      {!item.rated && item.completed ? (
                         <div className="flex flex-row gap-2">
-                          <input type="Number"  className="w-20 h-10 p-2" onChange={handleChange} value={ratings}/>
-                          <button className="bg-red-400 w-10 h-10 rounded">Rate</button>
+                          <input type="Number"  className="w-20 h-10 p-2" onChange={(e) => handleChange(item.username, item.date,e.target.value)} value={ratings[`${item.username}_${item.date}`] || ""}/>
+                          <button className="bg-red-400 w-10 h-10 rounded" onClick={()=>addRatings(item.username,item.date)}>Rate</button>
                         </div>
                         
                       ):(
-                        <div>{item.ratings}</div>
+                        item.rated && item.completed ?(
+                          <div>{item.ratings}</div>
+
+                        ):(
+                          <div></div>
+                        )
+                        
 
                       )}
                     </div>

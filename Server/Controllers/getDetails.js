@@ -96,7 +96,7 @@ const addJob=async(req,res)=>{
   const {username,name,address,client,profileLink}=req.body
   const user=await workermodel.findOne({username:client})
   const now=new Date()
-  const formattedDate = now.toISOString().slice(0, 10);
+  const formattedDate = now.toISOString().slice(0, 19);
   const newDate={
     username:username,
     name:name,
@@ -118,34 +118,60 @@ const addComplete=async(req,res)=>{
   const another=await clientModel.findOne({username:client})
   const history=another.history.filter(history=>history.username==username)
   history.sort((a, b) => new Date(b.date) - new Date(a.date))
+  // console.log(history)
   
-  const target=user.jobs.find(job => job.username === client);
+  const target=user.jobs.filter(job => job.username === client);
+  target.sort((a,b)=>new Date(b.date) - new Date(a.date))
+  // console.log(target)
   history[0].completed=true
-  
-  target.completed=true
+  target[0].completed=true
   user.save()
-  console.log(user)
   another.save()
   return res.status(200).json({mark:user.jobs})
 }
 
 const addRatings=async(req,res)=>{
   const {client,worker,ratings,date}=req.body
+  // console.log(ratings,date)
   const c=await clientModel.find({username:client})
   const w=await workermodel.find({username:worker})
-  const jobs= w.jobs.filter(
+  const filteredJobs = w
+  .flatMap((user) => user.jobs || []) // Combine all jobs arrays into one
+  .filter(
     (item) => item.username === client && item.date === date && item.completed
   );
-  jobs.ratings=Math.abs(ratings)%5
-  w.ratings=(w.ratings*5+Math.abs(ratings)%5)/5
-  w.jobs.rated=true
-  w.save()
-  const his=c.history.filter(
+  const rate=Number(ratings[worker+'_'+String(date)])
+  // console.log(filteredJobs[0].ratings)
+  filteredJobs[0].ratings=Math.abs(rate)%5
+  if (w[0].ratings==0){
+    w[0].ratings=Math.abs(rate)%5
+  }else{
+    w[0].ratings=(w[0].ratings*5+Math.abs(rate)%5)/5
+
+  }
+  
+  filteredJobs[0].rated=true
+
+  w.forEach(async (doc) => {
+    if (typeof doc.save === "function") {
+      await doc.save();
+    }
+  });
+
+  
+  const his=c
+  .flatMap((user) => user.history || []) // Combine all jobs arrays into one
+  .filter(
     (item) => item.username === worker && item.date === date && item.completed
   );
-  c.history.rated=true
-  his.ratings=Math.abs(ratings)%5
-  c.save()
+  // console.log(c[0].history)
+  his[0].ratings=Math.abs(rate)%5
+  his[0].rated=true
+  c.forEach(async (doc) => {
+    if (typeof doc.save === "function") {
+      await doc.save();
+    }
+  });
   return res.status(200)
 
 }
