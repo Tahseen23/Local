@@ -41,7 +41,7 @@ const workerSignUp = async (req, res) => {
     const workerUser = new RoleModel({ email,username, role: 'worker' })
     await workerUser.save()
 
-    const newUser = new workermodel({ name,username, email, password, occupation, image: profile?.url || '', location: locationUser, address ,bio:AddBio,price,ratings:0})
+    const newUser = new workermodel({ name,username, email, password, occupation:occupation.toLowerCase(), image: profile?.url || '', location: locationUser, address ,bio:AddBio,price,ratings:0})
     newUser.password=await bcrypt.hash(password,10)
     await newUser.save()
 
@@ -134,7 +134,8 @@ const login = async (req, res) => {
     const name = user.name
     const username=user.username
     const address=user.address
-    res.status(200).json({ message: 'Login sucesss', sucess: true, jwtToken, email, profile,role,username,address,name })
+    const location=user.location
+    res.status(200).json({ message: 'Login sucesss', sucess: true, jwtToken, email, profile,role,username,address,name,location })
   } catch (err) {
     console.log(err)
     res.status(500).json({

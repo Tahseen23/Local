@@ -6,6 +6,7 @@ import App from "../App";
 import Options from "../Pages/Options";
 import {createBrowserRouter} from 'react-router-dom'
 import DetailsPage from "../Pages/WorkerPage";
+import SearchPage from "../Pages/SearchPage";
 import Intermediate from "../Components/Intermediate";
 import GetJobs from "../Pages/GetJobs";
 const router=createBrowserRouter([
@@ -41,6 +42,9 @@ const router=createBrowserRouter([
           path:'/user/jobs/:name',
           element:<GetJobs/>
         
+      },{
+        path:'/search/:job',
+        element:<SearchPage/>
       }
     ]
   }

@@ -10,7 +10,8 @@ const ClientPage = () => {
   const username = useParams()
   const [ratings,setRating]=useState({})
   const name=useSelector(state => state.sliceData.username)
-  // console.log(name)
+  const location=useSelector(state=>state.sliceData.location)
+  // console.log(location)
   const navigate = useNavigate()
   const [history, setHistory] = useState(null)
   useEffect(() => {
@@ -52,10 +53,10 @@ const ClientPage = () => {
     }));
   };
 
-  async function getHistory(username) {
+  async function getHistory(name) {
     try {
       const token = localStorage.getItem('token')
-      const url = `http://localhost:8080/auth/role/history/${username}`
+      const url = `http://localhost:8080/auth/role/history/${name}`
       const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -75,10 +76,8 @@ const ClientPage = () => {
 
   useEffect(() => {
     if (username?.name) {
-
-
       getData();
-      getHistory(username.name)
+      getHistory(name)
     }
   }, [username]);
 
@@ -136,11 +135,14 @@ const ClientPage = () => {
               {history && history.map((item, index) => (
                 <div  className="flex flex-col p-5    bg-slate-600 rounded ">
                   <div  className="flex flex-row gap-5  ">
+                    <Link to={`/user/${item.username}`}>
                     {item.profile.length != 0 ? (
                       <img src={item.profile} alt="" className="w-10 h-15" />
                     ) : (
                       <img src={logo} alt="" className="w-20 h-25" />
                     )}
+                    </Link>
+                    
 
                     <div className="flex flex-row gap-40">
                       <div key={index + Math.random()} className="text-2xl">{item.name}</div>
@@ -154,12 +156,9 @@ const ClientPage = () => {
                       ):(
                         item.rated && item.completed ?(
                           <div>{item.ratings}</div>
-
                         ):(
                           <div></div>
                         )
-                        
-
                       )}
                     </div>
                   </div>
@@ -170,7 +169,6 @@ const ClientPage = () => {
 
 
             </div>
-
       </div> :
         <h1>Loding</h1>}
     </div>

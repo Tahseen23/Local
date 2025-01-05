@@ -14,7 +14,8 @@ const initialState = {
   comments: [],
   history: [],
   isClient: true,
-  isUserNamePresent:false
+  isUserNamePresent:false,
+  location:[]
 };
 
 export const slice=createSlice({
@@ -62,11 +63,14 @@ export const slice=createSlice({
     },
     setaddress:(state,action)=>{
       state.address=action.payload
+    },
+    setLocation:(state,action)=>{
+      state.location=action.payload
     }
   }
 
 })
 
-export const {setEmail,setprice,setratings,setoccupation,setbio,setisProfileLink,setisProfile,setusername,setname,setHistory,setComments,setisClient,setisUserNamePresent,setaddress}=slice.actions
+export const {setEmail,setprice,setratings,setoccupation,setbio,setisProfileLink,setisProfile,setusername,setname,setHistory,setComments,setisClient,setisUserNamePresent,setaddress,setLocation}=slice.actions
 
 export default slice.reducer

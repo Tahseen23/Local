@@ -27,7 +27,6 @@ const getRole=async(req,res)=>{
   return res.status(200).json({'role':role})
 
 }
-
 const getHistory=async(req,res)=>{
   const username=req.params.username
   console.log(username)
@@ -35,7 +34,6 @@ const getHistory=async(req,res)=>{
   console.log(user)
   const history=user.history
   return res.status(200).json({'history':history})
-  
 }
 
 
@@ -164,7 +162,6 @@ const addRatings=async(req,res)=>{
   .filter(
     (item) => item.username === worker && item.date === date && item.completed
   );
-  // console.log(c[0].history)
   his[0].ratings=Math.abs(rate)%5
   his[0].rated=true
   c.forEach(async (doc) => {
@@ -176,4 +173,31 @@ const addRatings=async(req,res)=>{
 
 }
 
-module.exports={getDetails,getRole,getHistory,addWorker,getComments,addComments,getJobs,addJob,addComplete,addRatings}
+
+
+const getWorker=async(req,res)=>{
+  const {job,location}=req.params
+  const lowerJob=job.toLowerCase()
+  const worker=await workermodel.find({occupation:lowerJob})
+  let loc=location.split(',')
+  loc[0]=Number(loc[0])
+  loc[1]=Number(loc[1])
+
+  const sortedWorker=worker.map(work=>({
+    ...work,
+    distance: Math.sqrt(
+      Math.pow(work.location[0] - loc[0], 2) +
+      Math.pow(work.location[1] - loc[1], 2)
+    )
+  })).sort((a, b) => a.distance - b.distance); 
+
+  console.log(sortedWorker)
+  return res.status(200).json({sortedWorker})
+
+}
+
+
+
+
+
+module.exports={getDetails,getRole,getHistory,addWorker,getComments,addComments,getJobs,addJob,addComplete,addRatings,getWorker}

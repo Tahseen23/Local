@@ -4,7 +4,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setaddress, setHistory, setisClient, setisProfile, setisProfileLink, setname, setusername } from '../app/store/slice.js';
+import { setaddress, setHistory, setisClient, setisProfile, setisProfileLink, setLocation, setname, setusername } from '../app/store/slice.js';
 
 
 const Login = () => {
@@ -41,7 +41,7 @@ const Login = () => {
     })
 
     const result=await response.json()
-    const { sucess, message, jwtToken, profile, email,role ,username,address,name} = result
+    const { sucess, message, jwtToken, profile, email,role ,username,address,name,location} = result
 
 
     if (sucess){
@@ -65,6 +65,7 @@ const Login = () => {
       }
       else{
         dispatch(setisClient(true))
+        dispatch(setLocation(location))
         navigate('/')
 
       }

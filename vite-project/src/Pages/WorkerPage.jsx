@@ -4,7 +4,7 @@ import { useState } from "react"
 import logo from "../logo/logo.bmp"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { setHistory } from "../app/store/slice"
+
 
 
 const DetailsPage = () => {
@@ -13,7 +13,6 @@ const DetailsPage = () => {
   const [text, setText] = useState('')
   const [jobs, setJobs] = useState('')
   const [history,setHistory]=useState('')
-  const dispatch = useDispatch()
   const profileLink = useSelector(state => state.sliceData.isProfileLink)
   const client = useSelector(state => state.sliceData.isClient)
   const userClient = useSelector(state => state.sliceData.username)
@@ -26,7 +25,7 @@ const DetailsPage = () => {
       navigate('/login');
     }
   }, [navigate]);
-  console.log(userClient)
+  
 
 
    async function getHistory(name){
@@ -191,13 +190,17 @@ const DetailsPage = () => {
   }
 
 
+
+
   useEffect(() => {
     if (username?.name) {
       getData();
       getComments()
       getJobs()
       if (client){
+        console.log(userClient)
         getHistory(userClient)
+        console.log(userClient)
       }
       
       
