@@ -31,6 +31,7 @@ const Header = () => {
 
   const handleSearch=()=>{
     navigate(`/search/${search}`)
+    setSearch('')
 
   }
 

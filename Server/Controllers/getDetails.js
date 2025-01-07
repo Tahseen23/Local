@@ -134,7 +134,7 @@ const addRatings=async(req,res)=>{
   const c=await clientModel.find({username:client})
   const w=await workermodel.find({username:worker})
   const filteredJobs = w
-  .flatMap((user) => user.jobs || []) // Combine all jobs arrays into one
+  .flatMap((user) => user.jobs || []) 
   .filter(
     (item) => item.username === client && item.date === date && item.completed
   );
@@ -158,7 +158,7 @@ const addRatings=async(req,res)=>{
 
   
   const his=c
-  .flatMap((user) => user.history || []) // Combine all jobs arrays into one
+  .flatMap((user) => user.history || []) 
   .filter(
     (item) => item.username === worker && item.date === date && item.completed
   );
@@ -191,7 +191,7 @@ const getWorker=async(req,res)=>{
     )
   })).sort((a, b) => a.distance - b.distance); 
 
-  console.log(sortedWorker)
+  // console.log(sortedWorker)
   return res.status(200).json({sortedWorker})
 
 }
