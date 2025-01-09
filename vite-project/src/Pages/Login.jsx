@@ -4,7 +4,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setaddress, setHistory, setisClient, setisProfile, setisProfileLink, setLocation, setname, setusername } from '../app/store/slice.js';
+import { setaddress, setHistory, setisClient, setisProfile, setisProfileLink, setLocation, setname, setNearWorker, setusername } from '../app/store/slice.js';
 
 
 const Login = () => {
@@ -25,6 +25,21 @@ const Login = () => {
     const copyInfo={...loginInfo}
     copyInfo[name]=value
     setLogInInfo(copyInfo)
+  }
+
+  const getWorker=async (location)=>{
+    const token=localStorage.getItem('token')
+    const url=`http://localhost:8080/auth/role/near/${location[0].toString() + ',' + location[1].toString()}`
+    const response=await fetch(url,{
+      method:'GET',
+      headers:{
+        'Content-Type':'application/json',
+        'authorization': `Bearer ${token}`
+      }
+    })
+    const data=await response.json()
+    // console.log(data.workersWithDistance)
+    dispatch(setNearWorker(data.workersWithDistance))
   }
 
 
@@ -66,6 +81,7 @@ const Login = () => {
       else{
         dispatch(setisClient(true))
         dispatch(setLocation(location))
+        getWorker(location)
         navigate('/')
 
       }

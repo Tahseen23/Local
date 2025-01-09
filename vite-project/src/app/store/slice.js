@@ -15,7 +15,8 @@ const initialState = {
   history: [],
   isClient: true,
   isUserNamePresent:false,
-  location:[]
+  location:[],
+  nearWorker:[]
 };
 
 export const slice=createSlice({
@@ -66,11 +67,14 @@ export const slice=createSlice({
     },
     setLocation:(state,action)=>{
       state.location=action.payload
+    },
+    setNearWorker:(state,action)=>{
+      state.nearWorker=action.payload
     }
   }
 
 })
 
-export const {setEmail,setprice,setratings,setoccupation,setbio,setisProfileLink,setisProfile,setusername,setname,setHistory,setComments,setisClient,setisUserNamePresent,setaddress,setLocation}=slice.actions
+export const {setEmail,setprice,setratings,setoccupation,setbio,setisProfileLink,setisProfile,setusername,setname,setHistory,setComments,setisClient,setisUserNamePresent,setaddress,setLocation,setNearWorker}=slice.actions
 
 export default slice.reducer
